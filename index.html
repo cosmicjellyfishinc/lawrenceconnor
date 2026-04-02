@@ -764,6 +764,12 @@
 
       $led.classList.add('on');
 
+      // Unlock audio immediately within the user gesture (required on mobile),
+      // start muted so nothing is audible during the arm swing animation.
+      loadTrack(0);
+      audio.volume = 0;
+      audio.play().catch(() => {});
+
       $tonearm.classList.add('lifting');
       setTimeout(() => {
         $tonearm.classList.add('playing');
@@ -774,7 +780,14 @@
       setTimeout(() => {
         $nowPlaying.classList.add('visible');
         $player.classList.add('visible');
-        playTrack(0);
+        audio.volume = 1;
+        audio.currentTime = 0;
+        isPlaying = true;
+        $vinyl.classList.add('spinning');
+        $vinyl.classList.remove('paused');
+        $pauseIcon.style.display = '';
+        $playIcon.style.display = 'none';
+        updateProgress();
       }, 3500);
     }
 
@@ -888,24 +901,27 @@
         $tonearm.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease';
         $tonearm.style.transform = 'rotate(' + PLAY_ANGLE + 'deg)';
         currentArmAngle = PLAY_ANGLE;
+
+        // Start audio immediately in the gesture handler (mobile autoplay policy)
+        if (!hasStarted) {
+          hasStarted = true;
+          $led.classList.add('on');
+          $nowPlaying.classList.add('visible');
+          $player.classList.add('visible');
+          playTrack(0);
+        } else {
+          audio.play();
+          isPlaying = true;
+          $vinyl.classList.remove('paused');
+          $pauseIcon.style.display = '';
+          $playIcon.style.display = 'none';
+          updateProgress();
+        }
+
         setTimeout(() => {
           $tonearm.classList.add('playing');
           $tonearm.style.transition = '';
           $tonearm.style.transform = '';
-          if (!hasStarted) {
-            hasStarted = true;
-            $led.classList.add('on');
-            $nowPlaying.classList.add('visible');
-            $player.classList.add('visible');
-            playTrack(0);
-          } else {
-            audio.play();
-            isPlaying = true;
-            $vinyl.classList.remove('paused');
-            $pauseIcon.style.display = '';
-            $playIcon.style.display = 'none';
-            updateProgress();
-          }
         }, 450);
       } else {
         $tonearm.style.transition = 'transform 0.5s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease';
