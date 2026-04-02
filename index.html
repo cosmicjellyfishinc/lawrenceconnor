@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lawrence Connor</title>
+  <meta name="description" content="Lawrence Connor — songwriter from Baltimore">
+  <meta property="og:title" content="Lawrence Connor">
+  <meta property="og:description" content="Songwriter from Baltimore">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.lawrenceconnor.com">
+  <meta property="og:image" content="https://www.lawrenceconnor.com/album-art.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎵</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Outfit:wght@200;300;400&display=swap" rel="stylesheet">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #070706;
+      --text: #e8e0d4;
+      --text-dim: #7a756d;
+      --accent: #c9b99a;
+      --border: #1e1c19;
+      --turntable-base: #161514;
+      --vinyl: #0a0a0a;
+    }
+
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: radial-gradient(ellipse at 50% 30%, #0d0c0b 0%, var(--bg) 70%);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.02;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    .glow {
+      position: fixed;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201, 185, 154, 0.04) 0%, transparent 65%);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      will-change: left, top;
+      transition: left 0.8s cubic-bezier(0.22, 1, 0.36, 1), top 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    @media (hover: none) { .glow { display: none; } }
+
+    main {
+      z-index: 1;
+      width: 100%;
+      max-width: 600px;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* ── Hero (above the fold) ── */
+
+    .hero {
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+
+    /* ── Header ── */
+
+    .top-name {
+      margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+      font-family: 'Clash Display', sans-serif;
+      font-weight: 500;
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* ── Turntable ── */
+
+    .turntable {
+      --tt-width: min(420px, 88vw);
+      width: var(--tt-width);
+      aspect-ratio: 1.28 / 1;
+      background: linear-gradient(160deg, #1a1918 0%, var(--turntable-base) 100%);
+      border-radius: 14px;
+      position: relative;
+      box-shadow:
+        0 2px 0 0 #222 inset,
+        0 30px 80px rgba(0,0,0,0.6),
+        0 4px 20px rgba(0,0,0,0.4);
+      opacity: 0;
+      animation: fadeUp 1.6s cubic-bezier(0.22, 1, 0.36, 1) 0.15s forwards;
+      cursor: grab;
+    }
+
+    .turntable:active { cursor: grabbing; }
+
+    .turntable::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.03);
+      pointer-events: none;
+    }
+
+    .platter {
+      position: absolute;
+      left: 9%;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 62%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, #141413 0%, #0f0f0e 100%);
+      box-shadow:
+        0 0 0 4px #1a1918,
+        0 0 0 5px rgba(255,255,255,0.03),
+        inset 0 0 20px rgba(0,0,0,0.4);
+    }
+
+    .vinyl {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 92%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--vinyl);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 2px 12px rgba(0,0,0,0.4);
+    }
+
+    .vinyl.spinning { animation: spin 3.5s linear infinite; }
+    .vinyl.paused { animation-play-state: paused; }
+
+    .vinyl::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: repeating-radial-gradient(
+        circle at 50% 50%,
+        transparent 0px, transparent 2.5px,
+        rgba(255,255,255,0.025) 2.8px, transparent 3.2px
+      );
+    }
+
+    .vinyl::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 200deg at 50% 50%,
+        transparent 0deg, rgba(255,255,255,0.018) 25deg,
+        transparent 55deg, transparent 140deg,
+        rgba(255,255,255,0.025) 170deg, transparent 200deg,
+        transparent 310deg, rgba(255,255,255,0.015) 340deg,
+        transparent 360deg
+      );
+    }
+
+    .label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 36%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 2px rgba(255,255,255,0.06),
+        inset 0 0 8px rgba(0,0,0,0.3);
+    }
+
+    .label img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .spindle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 4%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, #333 30%, #1a1a1a 100%);
+      z-index: 3;
+      box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    }
+
+    /* ── Tonearm ──
+       Rest = rotate(0deg)  → arm hangs near-vertical, headshell just OFF disc
+       Play = rotate(22deg) → CW swing moves headshell LEFT onto disc */
+
+    .tonearm {
+      position: absolute;
+      right: 6%;
+      top: 8%;
+      width: 28%;
+      height: 80%;
+      pointer-events: none;
+      transform-origin: 50% 12%;
+      transform: rotate(0deg);
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+      transition:
+        transform 2.8s cubic-bezier(0.4, 0, 0.15, 1),
+        filter 1s ease;
+    }
+
+    .tonearm.playing {
+      transform: rotate(22deg);
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.3));
+    }
+
+    .tonearm.lifting {
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.5));
+    }
+
+    .power-led {
+      position: absolute;
+      bottom: 10%;
+      right: 8%;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #333;
+      transition: all 1s ease;
+    }
+
+    .power-led.on {
+      background: #4a7c59;
+      box-shadow: 0 0 6px rgba(74, 124, 89, 0.6);
+      animation: pulse-led 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-led { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
+
+    /* ── Now Playing ── */
+
+    .now-playing {
+      width: 100%;
+      max-width: 480px;
+      margin-top: clamp(1rem, 2vh, 1.5rem);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      pointer-events: none;
+    }
+
+    .now-playing.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .np-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-bottom: 0.6rem;
+    }
+
+    .np-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 0.4rem;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .np-btn:hover { color: var(--text); }
+
+    .np-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+    .np-pause-play svg { width: 20px; height: 20px; }
+
+    .np-track-name {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 0.82rem;
+      color: var(--text);
+      letter-spacing: 0.06em;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .np-time {
+      font-size: 0.65rem;
+      font-weight: 200;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+      min-width: 45px;
+      text-align: right;
+    }
+
+    .np-progress-bar {
+      width: 100%;
+      height: 2px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 1px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .np-progress-bar:hover { height: 4px; }
+
+    .np-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 1px;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Spotify Embed ── */
+
+    .player {
+      width: 100%;
+      max-width: 480px;
+      margin-top: clamp(1.2rem, 2.5vh, 1.8rem);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+      pointer-events: none;
+    }
+
+    .player.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .player iframe {
+      width: 100%;
+      border-radius: 12px;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+
+    /* ── Music links ── */
+
+    .music-links {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2rem;
+      margin: clamp(2.5rem, 5vh, 3.5rem) 0 clamp(0.5rem, 1vh, 1rem);
+      opacity: 0;
+      animation: fadeUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards;
+    }
+
+    .music-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      text-decoration: none;
+      color: var(--text-dim);
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.4s ease;
+    }
+
+    .music-links a:hover { color: var(--accent); }
+    .music-links a svg { width: 16px; height: 16px; fill: currentColor; }
+    .music-links .dot { color: var(--border); font-size: 0.4rem; user-select: none; }
+
+    .divider {
+      width: 36px;
+      height: 1px;
+      background: var(--border);
+      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+      opacity: 0;
+      animation: fadeUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.6s forwards;
+    }
+
+    /* ── Email section ── */
+
+    .email-section {
+      margin-top: clamp(1.5rem, 3vh, 2.5rem);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 2rem 2rem 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
+    }
+
+    .email-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--text);
+      margin-bottom: 1.2rem;
+      letter-spacing: 0.04em;
+      opacity: 0.8;
+    }
+
+    .email-form {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .email-form input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      outline: none;
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      font-weight: 200;
+      font-size: 0.85rem;
+      padding: 0.7rem 1rem;
+      letter-spacing: 0.04em;
+      transition: border-color 0.4s ease;
+    }
+
+    .email-form input:focus { border-color: rgba(201, 185, 154, 0.3); }
+    .email-form input::placeholder { color: var(--text-dim); opacity: 0.4; }
+
+    .email-form button {
+      background: transparent;
+      border: 1px solid var(--text-dim);
+      color: var(--text-dim);
+      cursor: pointer;
+      font-family: 'Outfit', sans-serif;
+      font-weight: 300;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.72rem 1.3rem;
+      border-radius: 8px;
+      transition: all 0.4s ease;
+      white-space: nowrap;
+    }
+
+    .email-form button:hover { border-color: var(--accent); color: var(--accent); }
+
+    .form-message {
+      font-size: 0.72rem;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      margin-top: 0.8rem;
+      height: 1rem;
+      color: var(--accent);
+    }
+
+    footer {
+      margin-top: clamp(2.5rem, 5vh, 4rem);
+      margin-bottom: 2rem;
+      text-align: center;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.85s forwards;
+    }
+
+    footer a {
+      font-size: 0.62rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.4s ease;
+      opacity: 0.45;
+    }
+
+    footer a:hover { color: var(--accent); opacity: 1; }
+
+    @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 480px) {
+      .turntable { --tt-width: 92vw; }
+      .music-links { gap: 1.2rem; }
+      .music-links a { font-size: 0.58rem; letter-spacing: 0.1em; gap: 0.3rem; }
+      .music-links a svg { width: 14px; height: 14px; }
+      .player { max-width: 100%; }
+      .email-section { padding: 1.5rem; }
+      .email-form { flex-direction: column; }
+      .email-form button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow" id="glow"></div>
+
+  <main>
+    <section class="hero">
+      <h1 class="top-name">Lawrence Connor</h1>
+
+      <div class="turntable" id="turntable" role="button" aria-label="Play record — click or drag the tonearm">
+        <div class="platter">
+          <div class="vinyl" id="vinyl">
+            <div class="label">
+              <img src="album-art.png" alt="Do You Ever Dream of Then?" loading="eager">
+            </div>
+            <div class="spindle"></div>
+          </div>
+        </div>
+
+        <!-- Tonearm: arm leans slightly toward disc, rests just off the platter edge -->
+        <svg class="tonearm" id="tonearm" viewBox="0 0 120 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <ellipse cx="60" cy="6" rx="9" ry="6.5" fill="#2e2e2e"/>
+          <ellipse cx="60" cy="6" rx="6" ry="4" fill="#353535"/>
+          <circle cx="60" cy="24" r="14" fill="#1e1e1e"/>
+          <circle cx="60" cy="24" r="10" fill="#252525" stroke="#2a2a2a" stroke-width="0.5"/>
+          <circle cx="60" cy="24" r="4" fill="#1a1a1a"/>
+          <line x1="60" y1="24" x2="42" y2="165" stroke="#8a8a8a" stroke-width="2" stroke-linecap="round"/>
+          <line x1="60" y1="24" x2="42" y2="165" stroke="url(#arm-shine)" stroke-width="2.5" stroke-linecap="round"/>
+          <g transform="rotate(15, 42, 165)">
+            <rect x="26" y="162" width="16" height="9" rx="2" fill="#666"/>
+            <rect x="26" y="162" width="16" height="9" rx="2" fill="url(#shell-shine)"/>
+            <rect x="29" y="170" width="10" height="5" rx="1" fill="#4a4a4a"/>
+          </g>
+          <defs>
+            <linearGradient id="arm-shine" x1="60" y1="24" x2="42" y2="165" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#999"/><stop offset="50%" stop-color="#777"/><stop offset="100%" stop-color="#666"/>
+            </linearGradient>
+            <linearGradient id="shell-shine" x1="26" y1="162" x2="42" y2="162">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.1)"/><stop offset="100%" stop-color="transparent"/>
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <div class="power-led" id="powerLed"></div>
+      </div>
+
+      <!-- Now Playing -->
+      <div class="now-playing" id="nowPlaying">
+        <div class="np-controls">
+          <button class="np-btn" id="prevBtn" aria-label="Previous">
+            <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button class="np-btn np-pause-play" id="pausePlayBtn" aria-label="Pause">
+            <svg viewBox="0 0 24 24" id="pauseIcon"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            <svg viewBox="0 0 24 24" id="playIcon" style="display:none"><path d="M8 5v14l11-7z"/></svg>
+          </button>
+          <button class="np-btn" id="nextBtn" aria-label="Next">
+            <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
+          <span class="np-track-name" id="trackName">Fallout</span>
+          <span class="np-time" id="trackTime">0:00</span>
+        </div>
+        <div class="np-progress-bar" id="progressBar">
+          <div class="np-progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <!-- Spotify Embed -->
+      <div class="player">
+        <iframe
+          src="about:blank"
+          width="100%" height="80" frameBorder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+    </section>
+
+    <nav class="music-links">
+      <a href="https://open.spotify.com/artist/0dTyLBxKquvXcBuiN0KPQ0" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        Spotify
+      </a>
+      <span class="dot">&bull;</span>
+      <a href="https://music.apple.com/us/artist/lawrence-connor/1588978821" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Apple Music
+      </a>
+      <span class="dot">&bull;</span>
+      <a href="https://www.youtube.com/@lawrenceconnor" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+        YouTube
+      </a>
+    </nav>
+
+    <div class="divider"></div>
+
+    <section class="email-section">
+      <p class="email-label">Get notified when Lawrence releases new music. This hasn't happened for three years but he promises it's coming soon. He won't email you nudes.</p>
+      <form class="email-form" id="emailForm">
+        <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
+        <button type="submit">Join</button>
+      </form>
+      <p class="form-message" id="formMessage"></p>
+    </section>
+  </main>
+
+  <footer>
+    <a href="mailto:lcs@ivandingy.com">say hello</a>
+  </footer>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = '';
+
+    const REST_ANGLE = 0;
+    const PLAY_ANGLE = 22;
+    const tracks = [
+      { num: 1,  title: 'Fallout',              file: 'audio/01-fallout.m4a',              spotifyId: '7CXA43J8IqsjH8KqZwlJyc' },
+      { num: 2,  title: 'In Bloom',             file: 'audio/02-in-bloom.m4a',             spotifyId: '2Y84ESD8v0nUzKx09OQKh4' },
+      { num: 3,  title: "Couldn't Stop",        file: 'audio/03-couldnt-stop.m4a',         spotifyId: '1SYO7G9Hg3QVIHEaKYVBhk' },
+      { num: 4,  title: 'Love Affair',          file: 'audio/04-love-affair.m4a',          spotifyId: '3GmhMdC29wfeX62UgmCGIQ' },
+      { num: 5,  title: 'Better Way',           file: 'audio/05-better-way.m4a',           spotifyId: '4iZTvcfsxGPjI8Gj08vbWR' },
+      { num: 6,  title: 'Lonely Heart',         file: 'audio/06-lonely-heart.m4a',         spotifyId: '0r5GkAjR3Q2JXFkceL7L0l' },
+      { num: 7,  title: 'Never Was',            file: 'audio/07-never-was.m4a',            spotifyId: '6rbNjHsMgfTya41OsXP3wP' },
+      { num: 8,  title: 'Timing is the Virtue', file: 'audio/08-timing-is-the-virtue.m4a', spotifyId: '4BvXvsTbJHpLq71OZ6VqX1' },
+      { num: 9,  title: 'Darling, Remember',    file: 'audio/09-darling-remember.m4a',     spotifyId: '3LrTVlwYdl801jgxXZfEOk' },
+      { num: 10, title: 'Same',                 file: 'audio/10-same.m4a',                 spotifyId: '75xxTER2iplvQby2DD8SPT' },
+      { num: 11, title: 'Heart is Beating',     file: 'audio/11-heart-is-beating.m4a',     spotifyId: '4shH0DMNjpNF68h0OXM1rM' },
+      { num: 12, title: 'U Up?',                file: 'audio/12-u-up.m4a',                 spotifyId: '1bzcAOtMNFevD4DKP824RG' },
+      { num: 13, title: 'Feel the Rush',        file: 'audio/13-feel-the-rush.m4a',        spotifyId: '3pGNlqDLD0uLySovk3rQI3' },
+    ];
+
+    const audio = new Audio();
+    audio.preload = 'auto';
+    let currentTrack = 0;
+    let isPlaying = false;
+    let hasStarted = false;
+    let rafId = null;
+    let currentArmAngle = REST_ANGLE;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartAngle = 0;
+    let dragMoved = false;
+    let wasDragging = false;
+    let firstEmbed = true;
+
+    const $vinyl       = document.getElementById('vinyl');
+    const $tonearm     = document.getElementById('tonearm');
+    const $led         = document.getElementById('powerLed');
+    const $player      = document.querySelector('.player');
+    const $nowPlaying  = document.getElementById('nowPlaying');
+    const $trackName   = document.getElementById('trackName');
+    const $trackTime   = document.getElementById('trackTime');
+    const $progressFill = document.getElementById('progressFill');
+    const $progressBar = document.getElementById('progressBar');
+    const $pauseIcon   = document.getElementById('pauseIcon');
+    const $playIcon    = document.getElementById('playIcon');
+    const $turntable   = document.getElementById('turntable');
+    const $spotifyEmbed = document.querySelector('.player iframe');
+
+    function formatTime(s) {
+      if (!s || isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    function updateProgress() {
+      if (audio.duration) {
+        $progressFill.style.width = (audio.currentTime / audio.duration * 100) + '%';
+        $trackTime.textContent = formatTime(audio.currentTime);
+      }
+      if (isPlaying) rafId = requestAnimationFrame(updateProgress);
+    }
+
+    function updateSpotifyEmbed(index) {
+      const id = tracks[index].spotifyId;
+      if (!id) return;
+      const newSrc = 'https://open.spotify.com/embed/track/' + id + '?utm_source=generator&theme=0';
+      if (firstEmbed) {
+        firstEmbed = false;
+        $spotifyEmbed.src = newSrc;
+        return;
+      }
+      $spotifyEmbed.style.opacity = '0';
+      setTimeout(() => {
+        $spotifyEmbed.src = newSrc;
+        setTimeout(() => { $spotifyEmbed.style.opacity = '1'; }, 400);
+      }, 300);
+    }
+
+    function loadTrack(index) {
+      currentTrack = index;
+      audio.src = tracks[index].file;
+      $trackName.textContent = tracks[index].num + '. ' + tracks[index].title;
+      $progressFill.style.width = '0%';
+      $trackTime.textContent = '0:00';
+      updateSpotifyEmbed(index);
+    }
+
+    function playTrack(index) {
+      loadTrack(index);
+      audio.play();
+      isPlaying = true;
+      $vinyl.classList.add('spinning');
+      $vinyl.classList.remove('paused');
+      $pauseIcon.style.display = '';
+      $playIcon.style.display = 'none';
+      updateProgress();
+    }
+
+    function stopPlayback() {
+      audio.pause();
+      audio.currentTime = 0;
+      isPlaying = false;
+      hasStarted = false;
+      currentTrack = 0;
+      $vinyl.classList.remove('spinning');
+      $vinyl.classList.remove('paused');
+      $tonearm.classList.remove('playing');
+      $nowPlaying.classList.remove('visible');
+      $player.classList.remove('visible');
+      $led.classList.remove('on');
+      currentArmAngle = REST_ANGLE;
+      firstEmbed = true;
+      $pauseIcon.style.display = '';
+      $playIcon.style.display = 'none';
+      cancelAnimationFrame(rafId);
+    }
+
+    function startTurntable() {
+      if (hasStarted) return;
+      hasStarted = true;
+
+      $led.classList.add('on');
+
+      $tonearm.classList.add('lifting');
+      setTimeout(() => {
+        $tonearm.classList.add('playing');
+        $tonearm.classList.remove('lifting');
+        currentArmAngle = PLAY_ANGLE;
+      }, 400);
+
+      setTimeout(() => {
+        $nowPlaying.classList.add('visible');
+        $player.classList.add('visible');
+        playTrack(0);
+      }, 3500);
+    }
+
+    function togglePause() {
+      if (!hasStarted) { startTurntable(); return; }
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        $vinyl.classList.add('paused');
+        $pauseIcon.style.display = 'none';
+        $playIcon.style.display = '';
+        cancelAnimationFrame(rafId);
+      } else {
+        audio.play();
+        isPlaying = true;
+        $vinyl.classList.remove('paused');
+        $pauseIcon.style.display = '';
+        $playIcon.style.display = 'none';
+        updateProgress();
+      }
+    }
+
+    function nextTrack() {
+      if (currentTrack < tracks.length - 1) {
+        playTrack(currentTrack + 1);
+      } else {
+        stopPlayback();
+      }
+    }
+
+    function prevTrack() {
+      if (audio.currentTime > 3) {
+        audio.currentTime = 0;
+      } else if (currentTrack > 0) {
+        playTrack(currentTrack - 1);
+      }
+    }
+
+    let preloadedTrack = -1;
+    audio.addEventListener('timeupdate', () => {
+      if (audio.duration && audio.currentTime / audio.duration > 0.8) {
+        const next = currentTrack + 1;
+        if (next < tracks.length && next !== preloadedTrack) {
+          preloadedTrack = next;
+          const preloader = new Audio();
+          preloader.src = tracks[next].file;
+          preloader.preload = 'auto';
+        }
+      }
+    });
+
+    audio.addEventListener('ended', nextTrack);
+
+    audio.addEventListener('error', () => {
+      if (currentTrack < tracks.length - 1) nextTrack();
+    });
+
+    // ── Drag-to-play tonearm ──
+
+    function onDragStart(e) {
+      isDragging = true;
+      dragMoved = false;
+      dragStartX = e.clientX;
+      dragStartAngle = currentArmAngle;
+      $tonearm.style.transition = 'filter 0.3s ease';
+      document.body.style.userSelect = 'none';
+      e.preventDefault();
+    }
+
+    function onDragMove(e) {
+      if (!isDragging) return;
+      const deltaX = e.clientX - dragStartX;
+
+      if (Math.abs(deltaX) > 8 && !dragMoved) {
+        dragMoved = true;
+        $tonearm.classList.add('lifting');
+        if (isPlaying) {
+          audio.pause();
+          $vinyl.classList.add('paused');
+          cancelAnimationFrame(rafId);
+        }
+        $tonearm.style.transform = 'rotate(' + currentArmAngle + 'deg)';
+        $tonearm.classList.remove('playing');
+      }
+      if (!dragMoved) return;
+
+      const scale = $turntable.getBoundingClientRect().width * 0.4;
+      const norm = -(deltaX / scale) * PLAY_ANGLE;
+      const angle = Math.max(REST_ANGLE - 5, Math.min(PLAY_ANGLE + 2, dragStartAngle + norm));
+      currentArmAngle = angle;
+      $tonearm.style.transform = 'rotate(' + angle + 'deg)';
+    }
+
+    function onDragEnd() {
+      if (!isDragging) return;
+      isDragging = false;
+      $tonearm.classList.remove('lifting');
+      document.body.style.userSelect = '';
+
+      if (!dragMoved) {
+        $tonearm.style.transition = '';
+        return;
+      }
+
+      wasDragging = true;
+      setTimeout(() => { wasDragging = false; }, 300);
+
+      const mid = (REST_ANGLE + PLAY_ANGLE) / 2;
+
+      if (currentArmAngle >= mid) {
+        $tonearm.style.transition = 'transform 0.4s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease';
+        $tonearm.style.transform = 'rotate(' + PLAY_ANGLE + 'deg)';
+        currentArmAngle = PLAY_ANGLE;
+        setTimeout(() => {
+          $tonearm.classList.add('playing');
+          $tonearm.style.transition = '';
+          $tonearm.style.transform = '';
+          if (!hasStarted) {
+            hasStarted = true;
+            $led.classList.add('on');
+            $nowPlaying.classList.add('visible');
+            $player.classList.add('visible');
+            playTrack(0);
+          } else {
+            audio.play();
+            isPlaying = true;
+            $vinyl.classList.remove('paused');
+            $pauseIcon.style.display = '';
+            $playIcon.style.display = 'none';
+            updateProgress();
+          }
+        }, 450);
+      } else {
+        $tonearm.style.transition = 'transform 0.5s cubic-bezier(0.22,1,0.36,1), filter 0.3s ease';
+        $tonearm.style.transform = 'rotate(' + REST_ANGLE + 'deg)';
+        const wasPlaying = hasStarted;
+        setTimeout(() => {
+          $tonearm.classList.remove('playing');
+          $tonearm.style.transition = '';
+          $tonearm.style.transform = '';
+          if (wasPlaying) stopPlayback();
+          currentArmAngle = REST_ANGLE;
+        }, 550);
+      }
+    }
+
+    $turntable.addEventListener('mousedown', onDragStart);
+    document.addEventListener('mousemove', onDragMove);
+    document.addEventListener('mouseup', onDragEnd);
+
+    $turntable.addEventListener('touchstart', (e) => {
+      onDragStart(e.touches[0]);
+      e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchmove', (e) => {
+      if (isDragging) onDragMove(e.touches[0]);
+    }, { passive: true });
+    document.addEventListener('touchend', onDragEnd);
+
+    $turntable.addEventListener('click', () => {
+      if (wasDragging) { wasDragging = false; return; }
+      if (!hasStarted) {
+        startTurntable();
+      } else {
+        togglePause();
+      }
+    });
+
+    document.getElementById('pausePlayBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      togglePause();
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (currentTrack < tracks.length - 1) playTrack(currentTrack + 1);
+    });
+
+    document.getElementById('prevBtn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevTrack();
+    });
+
+    $progressBar.addEventListener('click', (e) => {
+      if (!audio.duration) return;
+      const rect = $progressBar.getBoundingClientRect();
+      const pct = (e.clientX - rect.left) / rect.width;
+      audio.currentTime = pct * audio.duration;
+      $progressFill.style.width = (pct * 100) + '%';
+    });
+
+    const glow = document.getElementById('glow');
+    glow.style.left = window.innerWidth / 2 + 'px';
+    glow.style.top = window.innerHeight / 3 + 'px';
+    document.addEventListener('mousemove', (e) => {
+      glow.style.left = e.clientX + 'px';
+      glow.style.top = e.clientY + 'px';
+    });
+
+    const form = document.getElementById('emailForm');
+    const message = document.getElementById('formMessage');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = form.querySelector('input').value;
+      const button = form.querySelector('button');
+      if (!GOOGLE_SCRIPT_URL) { message.textContent = 'coming soon'; return; }
+      button.disabled = true;
+      button.textContent = '...';
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST', mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, timestamp: new Date().toISOString() }),
+        });
+        message.textContent = "you're in \u2713";
+        form.querySelector('input').value = '';
+      } catch { message.textContent = 'something went wrong'; }
+      finally { button.disabled = false; button.textContent = 'Join'; }
+    });
+  </script>
+</body>
+</html>
