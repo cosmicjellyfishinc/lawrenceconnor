@@ -1,16 +1,14 @@
 import { colors, emailShell } from './styles.js';
 import { ALBUM_TITLE, ALBUM_ART_URL } from '../lib/tracks.js';
 
-export function welcomeEmail() {
+export function welcomeEmail(email = '') {
   const content = `
-    <!-- Album art -->
     <tr>
       <td align="center" style="padding-bottom:28px;">
         <img src="${ALBUM_ART_URL}" alt="${ALBUM_TITLE}" width="180" height="180" style="display:block;border-radius:50%;border:2px solid ${colors.cardBorder};">
       </td>
     </tr>
 
-    <!-- Card -->
     <tr>
       <td style="background:${colors.card};border:1px solid ${colors.cardBorder};border-radius:16px;padding:36px 32px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
@@ -40,5 +38,5 @@ export function welcomeEmail() {
       </td>
     </tr>`;
 
-  return emailShell(content);
+  return emailShell(content, email);
 }

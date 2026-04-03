@@ -598,8 +598,9 @@
       <!-- Spotify Embed -->
       <div class="player">
         <iframe
+          title="Spotify player"
           src="about:blank"
-          width="100%" height="80" frameBorder="0"
+          width="100%" height="80" frameborder="0"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy">
         </iframe>
@@ -631,7 +632,7 @@
         <input type="email" name="email" placeholder="your@email.com" required autocomplete="email">
         <button type="submit">Join</button>
       </form>
-      <p class="form-message" id="formMessage"></p>
+      <p class="form-message" id="formMessage" aria-live="polite"></p>
     </section>
   </main>
 
@@ -972,13 +973,19 @@
       prevTrack();
     });
 
-    $progressBar.addEventListener('click', (e) => {
+    function seekToPosition(clientX) {
       if (!audio.duration) return;
       const rect = $progressBar.getBoundingClientRect();
-      const pct = (e.clientX - rect.left) / rect.width;
+      const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
       audio.currentTime = pct * audio.duration;
       $progressFill.style.width = (pct * 100) + '%';
-    });
+    }
+
+    $progressBar.addEventListener('click', (e) => seekToPosition(e.clientX));
+    $progressBar.addEventListener('touchstart', (e) => {
+      seekToPosition(e.touches[0].clientX);
+      e.preventDefault();
+    }, { passive: false });
 
     const glow = document.getElementById('glow');
     glow.style.left = window.innerWidth / 2 + 'px';

@@ -8,7 +8,21 @@ export const colors = {
   buttonBg: '#1a1918',
 };
 
-export function emailShell(content) {
+const SITE_URL = process.env.SITE_URL || 'https://www.lawrenceconnor.com';
+
+export function escapeHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+export function emailShell(content, email = '') {
+  const unsubscribeUrl = email
+    ? `${SITE_URL}/api/unsubscribe?email=${encodeURIComponent(email)}`
+    : '#';
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,16 +39,15 @@ export function emailShell(content) {
           ${content}
         </table>
 
-        <!-- Footer -->
         <table role="presentation" width="520" cellpadding="0" cellspacing="0" style="max-width:520px;width:100%;margin-top:32px;">
           <tr>
             <td align="center" style="padding:16px 0;border-top:1px solid ${colors.cardBorder};">
-              <a href="https://www.lawrenceconnor.com" style="color:${colors.textDim};font-size:11px;text-decoration:none;letter-spacing:0.15em;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">lawrenceconnor.com</a>
+              <a href="${SITE_URL}" style="color:${colors.textDim};font-size:11px;text-decoration:none;letter-spacing:0.15em;text-transform:uppercase;font-family:Helvetica,Arial,sans-serif;">lawrenceconnor.com</a>
             </td>
           </tr>
           <tr>
             <td align="center" style="padding-bottom:16px;">
-              <a href="%UNSUBSCRIBE_URL%" style="color:${colors.textDim};font-size:10px;text-decoration:underline;font-family:Helvetica,Arial,sans-serif;opacity:0.6;">Unsubscribe</a>
+              <a href="${unsubscribeUrl}" style="color:${colors.textDim};font-size:10px;text-decoration:underline;font-family:Helvetica,Arial,sans-serif;opacity:0.6;">Unsubscribe</a>
             </td>
           </tr>
         </table>
