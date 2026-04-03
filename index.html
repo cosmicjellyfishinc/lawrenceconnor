@@ -640,8 +640,6 @@
   </footer>
 
   <script>
-    const GOOGLE_SCRIPT_URL = '';
-
     const REST_ANGLE = 0;
     const PLAY_ANGLE = 22;
     const tracks = [
@@ -996,16 +994,19 @@
       e.preventDefault();
       const email = form.querySelector('input').value;
       const button = form.querySelector('button');
-      if (!GOOGLE_SCRIPT_URL) { message.textContent = 'coming soon'; return; }
       button.disabled = true;
       button.textContent = '...';
       try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST', mode: 'no-cors',
+        const resp = await fetch('/api/subscribe', {
+          method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, timestamp: new Date().toISOString() }),
+          body: JSON.stringify({ email }),
         });
-        message.textContent = "you're in \u2713";
+        const data = await resp.json();
+        if (!resp.ok) throw new Error(data.error);
+        message.textContent = data.result === 'already_subscribed'
+          ? 'you\'re already on the list \u2713'
+          : 'you\'re in \u2713';
         form.querySelector('input').value = '';
       } catch { message.textContent = 'something went wrong'; }
       finally { button.disabled = false; button.textContent = 'Join'; }

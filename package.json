@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "name": "lawrenceconnor",
+  "description": "Website and drip email campaign for Lawrence Connor",
+  "dependencies": {
+    "resend": "^4.0.0",
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}
